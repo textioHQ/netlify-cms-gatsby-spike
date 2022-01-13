@@ -4,6 +4,12 @@ title: Great coffee with a blahhhh
 image: /img/home-jumbotron.jpg
 heading: Great coffee with a conscience
 subheading: Support sustainable farming while enjoying a cup
+richText: |-
+  hello **there** *neato*
+
+  ## a header
+
+  this should not be <b>bold</b>
 mainpitch:
   title: Why Kaldi
   description: >
@@ -67,17 +73,3 @@ main:
     alt: Coffee beans
     image: /img/products-grid1.jpg
 ---
-This is some rich text **hello there** *wow super cool*
-
-* Hi
-
-  * Bye
-* neat
-
-  * cool
-
-    * what
-
-[hiiiii](http://localhost:8000/admin/#/collections/pages/entries/index) there
-
-# What do you think?

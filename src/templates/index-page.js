@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { unified } from 'unified';
 import { Link, graphql } from "gatsby";
 import { getImage } from "gatsby-plugin-image";
 
@@ -7,6 +8,8 @@ import Layout from "../components/Layout";
 import Features from "../components/Features";
 import BlogRoll from "../components/BlogRoll";
 import FullWidthImage from "../components/FullWidthImage";
+import remarkParse from 'remark-parse';
+import remarkHtml from 'remark-html';
 
 // eslint-disable-next-line
 export const IndexPageTemplate = ({
@@ -14,11 +17,19 @@ export const IndexPageTemplate = ({
   title,
   heading,
   subheading,
+  richText,
   mainpitch,
   description,
   intro,
 }) => {
+  const [richTextAsHtml, setRichTextAsHtml] = useState(null);
   const heroImage = getImage(image) || image;
+
+
+  useEffect(() => {
+    // TODO: this ends up stripping out text from the rich text editor that happens to look like HTML
+    unified().use(remarkParse).use(remarkHtml).process(richText).then(setRichTextAsHtml);
+  }, [richText]);
 
   return (
     <div>
@@ -45,6 +56,11 @@ export const IndexPageTemplate = ({
                       <p>{description}</p>
                     </div>
                   </div>
+                  {richTextAsHtml && (
+                    <div className="columns">
+                      <div className="column is-12" dangerouslySetInnerHTML={{ __html: richTextAsHtml }}/>
+                    </div>
+                  )}
                   <Features gridItems={intro.blurbs} />
                   <div className="columns">
                     <div className="column is-12 has-text-centered">
@@ -79,6 +95,7 @@ IndexPageTemplate.propTypes = {
   title: PropTypes.string,
   heading: PropTypes.string,
   subheading: PropTypes.string,
+  richText: PropTypes.string,
   mainpitch: PropTypes.object,
   description: PropTypes.string,
   intro: PropTypes.shape({
@@ -96,6 +113,7 @@ const IndexPage = ({ data }) => {
         title={frontmatter.title}
         heading={frontmatter.heading}
         subheading={frontmatter.subheading}
+        richText={frontmatter.richText}
         mainpitch={frontmatter.mainpitch}
         description={frontmatter.description}
         intro={frontmatter.intro}
@@ -126,6 +144,7 @@ export const pageQuery = graphql`
         }
         heading
         subheading
+        richText
         mainpitch {
           title
           description
